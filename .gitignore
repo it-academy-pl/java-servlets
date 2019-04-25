@@ -28,3 +28,4 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 
 tomcat.8080/
+src/main/resources/db.properties
