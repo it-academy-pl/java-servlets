@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(urlPatterns = "/addStudent")
+@WebServlet(urlPatterns = "/addStudents")
 public class AddStudentServlet extends HttpServlet {
     StudentService studentService = new StudentService();
     @Override
