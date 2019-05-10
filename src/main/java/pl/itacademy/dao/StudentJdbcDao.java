@@ -67,7 +67,7 @@ public class StudentJdbcDao implements StudentDao {
             preparedStatement.setString(3, student.getEmail());
             preparedStatement.setString(4, student.getPassword());
             preparedStatement.execute();
-            connection.commit();
+           // connection.commit();
         }
     }
 }

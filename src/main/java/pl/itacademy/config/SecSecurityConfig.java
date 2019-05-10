@@ -1,7 +1,9 @@
 package pl.itacademy.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,17 +16,24 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
  * Created by Asia on 04.05.2019.
  */
 @Configuration
+@Import(DatabaseConfig.class)
 @EnableWebSecurity
 public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    DatabaseConfig databaseConfig;
+
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("user1").password(passwordEncoder().encode("user1Pass")).roles("USER")
+        auth.jdbcAuthentication().dataSource(databaseConfig.dataSource())
+                .usersByUsernameQuery("select email, password, true from STUDENTS where email=?")
+                .passwordEncoder(passwordEncoder())
+                .authoritiesByUsernameQuery("select email, 'ROLE_USER' from STUDENTS where email=?")
+                /*.withUser("user1").password(passwordEncoder().encode("user1Pass")).roles("USER")
                 .and()
                 .withUser("user2").password(passwordEncoder().encode("user2Pass")).roles("USER")
                 .and()
-                .withUser("admin").password(passwordEncoder().encode("adminPass")).roles("ADMIN");
+                .withUser("admin").password(passwordEncoder().encode("adminPass")).roles("ADMIN")*/;
     }
 
 
@@ -41,7 +50,7 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login.html")
                 .loginProcessingUrl("/perform_login")
-                .defaultSuccessUrl("/homepage.html", true)
+                .defaultSuccessUrl("/addStudent.html", true)
                 //.failureUrl("/login.html?error=true")
                 //.failureHandler(authenticationFailureHandler())
                 .and()
@@ -51,23 +60,17 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.logoutSuccessHandler(logoutSuccessHandler());
     }
 
-/*    @Bean
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }*/
+    }
 
+/*
     @SuppressWarnings("deprecation")
     @Bean
     public static NoOpPasswordEncoder passwordEncoder() {
         return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
-    }
-/*
-
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return  NoOpPasswordEncoder().;
-    }
-*/
+    }*/
 
 
 }

@@ -20,7 +20,7 @@ import java.util.List;
 @WebServlet("/allStudents")
 public class AllStudentsServlet extends HttpServlet {
 
-    StudentJdbcDao studentJdbcDao = new StudentJdbcDao();
+    //StudentJdbcDao studentJdbcDao = new StudentJdbcDao();
     StudentService studentService = new StudentService();
 
     @Override
@@ -29,7 +29,7 @@ public class AllStudentsServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         response.setContentType("text/html");
         List<Student> students = null;
-        studentService.getAllStudents();
+        //studentService.getAllStudents();
 
         //out.println("<html><body><h1>List of students</h1><ul>");
 
